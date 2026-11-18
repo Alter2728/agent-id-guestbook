@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent ID Guestbook — BSC Testnet</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; line-height: 1.5; }
+  h1 { font-size: 1.6rem; margin-bottom: .2rem; }
+  .sub { color: #555; margin-top: 0; }
+  .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+  button { padding: .55rem 1rem; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: #fff; color: #111; }
+  textarea { width: 100%; box-sizing: border-box; min-height: 64px; padding: .5rem; border-radius: 8px; border: 1px solid #bbb; font: inherit; }
+  .status { font-size: .95rem; }
+  .ok { color: #0a7a2f; } .warn { color: #9a6200; } .err { color: #b00020; }
+  .msg { border-bottom: 1px solid #eee; padding: .6rem 0; }
+  .msg .meta { font-size: .85rem; color: #666; }
+  .msg .text { white-space: pre-wrap; word-break: break-word; }
+  code { background: #f2f2f2; padding: .1rem .3rem; border-radius: 4px; font-size: .9em; }
+  .fineprint { font-size: .85rem; color: #666; }
+  #deployBanner { background: #fff4d6; border: 1px solid #e8c85a; }
+</style>
+</head>
+<body>
+<h1>Agent ID Guestbook</h1>
+<p class="sub">An on-chain guestbook on BNB Smart Chain Testnet. Only wallets that hold an
+<a href="https://www.binance.com/en/support/announcement/detail/95f5dbe0ea674a48a739b59e046648bf" target="_blank" rel="noopener">Agent ID</a>
+(a <code>.ai</code> name) can write a message. Anyone can read.</p>
+
+<div class="card" id="deployBanner" hidden>
+  <strong>Testnet deployment pending.</strong>
+  The guestbook contract has not been deployed to BSC Testnet yet, so posting is
+  disabled for now. Reading works once the contract is live. Check the
+  <a href="https://github.com/alter2728/agent-id-guestbook" target="_blank" rel="noopener">repository</a>
+  for the latest status.
+</div>
+
+<div class="card">
+  <div class="status" id="walletStatus">Wallet not connected.</div>
+  <p>
+    <button id="connectBtn">Connect wallet</button>
+    <button id="refreshBtn" class="secondary">Refresh messages</button>
+  </p>
+  <div class="status" id="agentIdStatus"></div>
+  <div class="status" id="networkStatus"></div>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Write a message</h2>
+  <textarea id="msgInput" maxlength="280" placeholder="Say hello (max 280 characters)…" disabled></textarea>
+  <p>
+    <button id="postBtn" disabled>Post message</button>
+    <span class="fineprint" id="postHint">Connect a wallet holding an Agent ID to post.</span>
+  </p>
+  <p class="fineprint">Posting sends an on-chain transaction from your wallet and costs testnet gas
+  (tBNB). You always confirm the transaction yourself in your wallet — nothing is
+  ever sent without your approval. This guestbook promises no rewards, income or
+  returns of any kind.</p>
+  <div class="status" id="txStatus"></div>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Messages <span id="msgCount"></span></h2>
+  <div id="messages"><p class="fineprint">Loading…</p></div>
+</div>
+
+<div class="card fineprint">
+  <strong>How Agent ID is used here:</strong> the smart contract checks, on-chain,
+  that the posting address holds at least one Agent ID (<code>balanceOf</code> on the
+  Agent ID registry). That is the only use of Agent ID in this app — it gates who can
+  write. The app does not look up anyone's wallet by name, does not collect seed
+  phrases or private keys, and never moves anyone's funds.
+  <br><br>
+  <strong>Contracts (BSC Testnet):</strong><br>
+  Guestbook: <code id="gbAddr">—</code><br>
+  Agent ID registry (testnet mock): <code id="regAddr">—</code><br>
+  Mainnet Agent ID registry: <code>0x60b9262456de011f7d15a54cdd8c48baaa8b022f</code><br><br>
+  Source code: <a href="https://github.com/alter2728/agent-id-guestbook" target="_blank" rel="noopener">github.com/alter2728/agent-id-guestbook</a>
+  · Built for the Binance Agent ID Hackathon (submission period ends 9 Dec 2026).
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
